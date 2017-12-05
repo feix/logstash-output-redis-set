@@ -24,11 +24,9 @@ output {
 }
 ```
 
-
-
 * [set](examples/set.conf)
 * [zadd](examples/zadd.conf)
-* [sadd](examples/zadd.conf)
+* [sadd](examples/sadd.conf)
 * [hset](examples/hset.conf)
 
 ## Documentation
