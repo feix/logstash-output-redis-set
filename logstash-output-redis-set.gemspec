@@ -2,9 +2,9 @@ Gem::Specification.new do |s|
   s.name          = 'logstash-output-redis-set'
   s.version       = '0.1.0'
   s.licenses      = ['Apache-2.0']
-  s.summary       = 'logstash set event value to redis'
+  s.summary       = 'Set redis value from event'
   s.description   = ''
-  s.homepage      = ''
+  s.homepage      = 'https://42.feix.im'
   s.authors       = ['feix.chow']
   s.email         = 'feix.chow@gmail.com'
   s.require_paths = ['lib']
