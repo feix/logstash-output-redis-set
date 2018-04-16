@@ -80,7 +80,7 @@ class LogStash::Outputs::Redis < LogStash::Outputs::Base
         redisearch_client.info().each do | key, value |
           if value.class == Array
             if key == "fields"
-              values.each do |item|
+              value.each do |item|
                 docFields.push(item[0])
                 docFields.push(event.get(item[0]))
               end
