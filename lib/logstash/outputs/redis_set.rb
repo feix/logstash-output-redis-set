@@ -25,7 +25,7 @@ class LogStash::Outputs::Redis < LogStash::Outputs::Base
   config :reconnect_interval, :validate => :number, :default => 1
 
   # The action of a redis output
-  config :action, :validate => [ "SET", "SADD", "HSET", "ZADD" ], :required => true, :default => "SET"
+  config :action, :validate => [ "SET", "SADD", "HSET", "ZADD" , "FTADD"], :required => true, :default => "SET"
 
   # The name of a redis key
   config :key, :validate => :string, :required => true
@@ -38,9 +38,13 @@ class LogStash::Outputs::Redis < LogStash::Outputs::Base
   config :member, :validate => :string, :require => false
   config :field, :validate => :string, :require => false
 
+  # The id of a redisearch document
+  config :docId, :validate => :string, :require => false
+
   public
   def register
     require 'redis'
+    require 'redisearch-rb'
     @redis = nil
   end # def register
 
@@ -68,6 +72,24 @@ class LogStash::Outputs::Redis < LogStash::Outputs::Base
         field = event.sprintf(@field)
         value = event.sprintf(@value)
         @redis.hset(key, field, value)
+      when "FTADD"
+        redisearch_client = RedisSearch.new(key, @redis)
+        
+        docFields = [];
+        
+        redisearch_client.info().each do | key, value |
+          if value.class == Array
+            if key == "fields"
+              values.each do |item|
+                docFields.push(item[0])
+                docFields.push(event.get(item[0]))
+              end
+            end
+          end
+        end
+
+        doc = [event.sprintf(@docId), docFields]
+        redisearch_client.add_docs(doc, {replace: true})
       end
     rescue => e
       @logger.warn("Failed to set event to Redis", :event => event,
