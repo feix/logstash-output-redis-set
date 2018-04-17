@@ -73,7 +73,7 @@ class LogStash::Outputs::Redis < LogStash::Outputs::Base
         value = event.sprintf(@value)
         @redis.hset(key, field, value)
       when "FTADD"
-        redisearch_client = RedisSearch.new(key, @redis)
+        redisearch_client = RediSearch.new(key, @redis)
         
         docFields = [];
         
@@ -88,7 +88,7 @@ class LogStash::Outputs::Redis < LogStash::Outputs::Base
           end
         end
 
-        doc = [event.sprintf(@docId), docFields]
+        doc = [[event.sprintf(@docId), docFields]]
         redisearch_client.add_docs(doc, {replace: true})
       end
     rescue => e

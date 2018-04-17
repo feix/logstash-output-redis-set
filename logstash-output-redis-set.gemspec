@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'logstash-output-redis-set'
-  s.version       = '0.1.1'
+  s.version       = '0.1.5'
   s.licenses      = ['Apache-2.0']
   s.summary       = 'Set redis value from event with redisearch support for FT.ADD'
   s.description   = ''
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.metadata = { "logstash_plugin" => "true", "logstash_group" => "output" }
 
   # Gem dependencies
-  s.add_runtime_dependency "redisearch-rb", "~> 0.2.0"
+  s.add_runtime_dependency "redisearch-rb", "~> 0.1.7"
   s.add_runtime_dependency "logstash-core-plugin-api", "~> 2.0"
   s.add_runtime_dependency "logstash-codec-plain"
   s.add_development_dependency "logstash-devutils"
