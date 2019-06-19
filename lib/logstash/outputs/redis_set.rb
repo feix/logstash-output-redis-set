@@ -20,12 +20,12 @@ class LogStash::Outputs::Redis < LogStash::Outputs::Base
 
   # Connection timeout
   config :timeout, :validate => :number, :default => 5
-  
+
   # Interval for reconnecting to failed Redis connections
   config :reconnect_interval, :validate => :number, :default => 1
 
   # The action of a redis output
-  config :action, :validate => [ "SET", "SADD", "HSET", "ZADD" ], :required => true, :default => "SET"
+  config :action, :validate => [ "SET", "SADD", "HSET", "ZADD", "DEL", "UNLINK" ], :required => true, :default => "SET"
 
   # The name of a redis key
   config :key, :validate => :string, :required => true
@@ -68,6 +68,12 @@ class LogStash::Outputs::Redis < LogStash::Outputs::Base
         field = event.sprintf(@field)
         value = event.sprintf(@value)
         @redis.hset(key, field, value)
+      when "DEL"
+        field = event.sprintf(@field)
+        @redis.del(key)
+      when "UNLINK"
+        field = event.sprintf(@field)
+        @redis.unlink(key)
       end
     rescue => e
       @logger.warn("Failed to set event to Redis", :event => event,
